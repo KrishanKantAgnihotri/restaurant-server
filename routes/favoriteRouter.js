@@ -29,7 +29,7 @@ favoriteRouter.route('/')
                 Favorites.create({ user: req.user._id })
                     .then((favorite) => {
                         for (var i = 0; i < req.body.length; i++)
-                            if (favorite.dishes.indexOf(req.body[i]._id) === -1)
+                            if (favorite.dishes.indexOf(req.body[i]._id) < 0)
                                 favorite.dishes.push(req.body[i]);
                         favorite.save()
                             .then((favorite) => {
@@ -54,7 +54,7 @@ favoriteRouter.route('/')
             }
             else {
                 for (i = 0; i < req.body.length; i++) {
-                    if (favorite.dishes.indexOf(req.body[i]._id) === -1)
+                    if (favorite.dishes.indexOf(req.body[i]._id) < 0)
                         favorite.dishes.push(req.body[i]);
                 }
                 favorite.save()
@@ -69,7 +69,9 @@ favoriteRouter.route('/')
                             })
 
                     })
-                    .catch((err) => next(err))
+                    .catch((err) => {
+                        return next(err);
+                    });
             }
         })
 
@@ -147,7 +149,7 @@ favoriteRouter.route('/:dishId')
             }
             else {
                 if (favorite.dishes.indexOf(req.params.dishId) < 0) {
-                    favorite.dishes.push({ "_id": req.params.dishId })
+                    favorite.dishes.push(req.body)
                     favorite.save()
                         .then((favorite) => {
                             Favorites.findById(favorite._id)

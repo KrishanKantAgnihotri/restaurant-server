@@ -69,7 +69,7 @@ router.post("/login", cors.corsWithOptions, (req, res, next) => {
         res.json({ success: false, status: "Login Unsuccessful", err: "Could not log in User!" });
       }
       var token = authenticate.getToken({ _id: req.user._id });
-      res.statusCode = 401;
+      res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       res.json({ success: true, status: "Login Successful!", token: token });
     });
@@ -97,7 +97,7 @@ router.get("/facebook/token", passport.authenticate("facebook-token"), (req, res
   }
 })
 
-router.get("/checkJWTToken", cors.corsWithOptions, (req, res) => {
+router.get("/checkJWTtoken", cors.corsWithOptions, (req, res) => {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err) return next(err);
 
