@@ -9,8 +9,8 @@ var router = express.Router();
 router.use(bodyParser.json());
 
 /* GET users listing. */
-router.options("*", cors.corsWithOptions, (req, res) => { res.sendStatus(200) })
-router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, function (req, res, next) {
+router.options("*", (req, res) => { res.sendStatus(200) })
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, function (req, res, next) {
   User.find({})
     .then((users) => {
       res.statusCode = 200;
@@ -23,7 +23,7 @@ router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.veri
       res.json({ err: err });
     });
 });
-router.post("/signup", cors.corsWithOptions, function (req, res, next) {
+router.post("/signup", function (req, res, next) {
   User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
     if (err) {
       res.statusCode = 500;
@@ -53,7 +53,7 @@ router.post("/signup", cors.corsWithOptions, function (req, res, next) {
     }
   });
 });
-router.post("/login", cors.corsWithOptions, (req, res, next) => {
+router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
 
@@ -75,7 +75,7 @@ router.post("/login", cors.corsWithOptions, (req, res, next) => {
     });
   })(req, res, next);
 });
-router.get("/logout", cors.corsWithOptions, (req, res) => {
+router.get("/logout", (req, res) => {
   if (req.session) {
     req.session.destroy();
     res.clearCookie("session-id");
@@ -97,7 +97,7 @@ router.get("/facebook/token", passport.authenticate("facebook-token"), (req, res
   }
 })
 
-router.get("/checkJWTtoken", cors.corsWithOptions, (req, res) => {
+router.get("/checkJWTtoken", (req, res) => {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err) return next(err);
 
