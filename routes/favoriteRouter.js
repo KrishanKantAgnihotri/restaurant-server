@@ -10,7 +10,7 @@ const favoriteRouter = express.Router();
 favoriteRouter.use(bodyParser.json());
 
 favoriteRouter.route('/')
-    .options (req, res) => { res.sendStatus(200); })
+    .options ((req, res) => { res.sendStatus(200); })
     .get(authenticate.verifyUser, (req, res, next) => {
         Favorites.findOne({ user: req.user._id })
             .populate("user")
