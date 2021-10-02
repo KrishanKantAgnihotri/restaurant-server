@@ -10,7 +10,7 @@ const commentRouter = express.Router();
 commentRouter.use(bodyParser.json());
 
 commentRouter.route("/")
-//     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+    .options((req, res) => { res.sendStatus(200); })
     .get((req, res, next) => {
         Comments.find(req.query)
             .populate("author")
